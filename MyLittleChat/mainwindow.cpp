@@ -12,8 +12,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     request.setUrl(QUrl("https://api.openai.com/v1/chat/completions"));
     request.setRawHeader(QByteArray("Content-Type"), QByteArray("application/json"));
-    //                                                                   здесь необходимо указать api ключ
-    request.setRawHeader(QByteArray("Authorization"), QByteArray("Bearer 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"));
+
+    QFile file("api_key");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << "file not opened";
+        return;
+    }
+    QString key_header = "Bearer " + QString::fromStdString(file.readLine().toStdString());
+    request.setRawHeader(QByteArray("Authorization"),
+                         QByteArray(qPrintable(key_header)));
 
     req = {
         {"model", "gpt-3.5-turbo"},

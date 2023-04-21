@@ -4,12 +4,14 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
 
-LIBS += -L/hdd/projects/chatgpt/MyLittleChat/openssl-1.1.1q -lcrypto -L/hdd/projects/chatgpt/MyLittleChat/openssl-1.1.1q -lssl
+#LIBS += -L/hdd/projects/chatgpt/MyLittleChat/openssl-1.1.1q -lcrypto -L/hdd/projects/chatgpt/MyLittleChat/openssl-1.1.1q -lssl
 #LIBS += -lcrypto -lssl
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
+message($${QMAKE_HOST.os})
 
 SOURCES += \
     main.cpp \
@@ -25,3 +27,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    api_key
