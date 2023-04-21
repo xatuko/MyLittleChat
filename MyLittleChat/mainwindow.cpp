@@ -13,7 +13,13 @@ MainWindow::MainWindow(QWidget *parent)
     request.setUrl(QUrl("https://api.openai.com/v1/chat/completions"));
     request.setRawHeader(QByteArray("Content-Type"), QByteArray("application/json"));
     //                                                                   здесь необходимо указать api ключ
-    request.setRawHeader(QByteArray("Authorization"), QByteArray("Bearer <insert your api key here>"));
+    request.setRawHeader(QByteArray("Authorization"), QByteArray("Bearer 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"));
+
+    req = {
+        {"model", "gpt-3.5-turbo"},
+        {"messages", QJsonArray()},
+        {"temperature", 0.5}
+    };
 }
 
 MainWindow::~MainWindow()
@@ -24,38 +30,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    QByteArray arr;
-    arr.fromStdString("{model: gpt-3.5-turbo, messages: [{role: user, content: \"Поясни за buildroot\"}], temperature: 0.7}");
+    auto message = ui->textEdit->toPlainText();
 
-    QJsonObject req = {
-        {"model", "gpt-3.5-turbo"},
-        {"messages", QJsonArray({ QJsonObject({{"role", "user"}, {"content", "Поясни за buildroot"}})})},
-//         QJsonObject({{"role", "user"},
-//                                  {"content", "Поясни за buildroot"}})},
-        {"temperature", 0.7}
-    };
-
+    auto messages = req["messages"].toArray();
+    messages.append(QJsonObject({{"role", "user"}, {"content", message}}));
+    req["messages"] = messages;
     QJsonDocument doc(req);
-
-
-    qDebug() << doc.toJson(QJsonDocument::Compact);
-//    QIODevice * dev = new QIODevice() = QString("{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"Поясни за buildroot\"}], \"temperature\": 0.7}");
-//    for (auto & header : request.rawHeaderList())
-//    {
-
-//        ui->textEdit->setText(ui->textEdit->toPlainText() + "\n" + QString(header) + ": " + QString(request.rawHeader(header)));
-//        qDebug() << QString(header) << " : " << QString(request.rawHeader(header));
-//    }
     reply = manager->post(request, doc.toJson(QJsonDocument::Compact));
-
 }
 
 void MainWindow::replyFinished()
 {
-    ui->textEdit->clear();
-
+    ui->textEdit_2->clear();
     QByteArray response = reply->readAll();
-
-    ui->textEdit->setText(QString(response));
+    QString resp = QJsonDocument::fromJson(response).object()["choices"][0]["message"]["content"].toString();
+    ui->textEdit_2->setText(resp);
 }
 

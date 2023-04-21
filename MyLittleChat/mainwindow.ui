@@ -19,7 +19,7 @@
      <rect>
       <x>50</x>
       <y>30</y>
-      <width>681</width>
+      <width>251</width>
       <height>321</height>
      </rect>
     </property>
@@ -35,6 +35,16 @@
     </property>
     <property name="text">
      <string>PushButton</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="textEdit_2">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>30</y>
+      <width>251</width>
+      <height>321</height>
+     </rect>
     </property>
    </widget>
   </widget>

@@ -28,5 +28,7 @@ private:
     QNetworkAccessManager * manager;
     QNetworkRequest request;
     QNetworkReply * reply;
+    QJsonObject req;
+    QJsonArray context;
 };
 #endif // MAINWINDOW_H
