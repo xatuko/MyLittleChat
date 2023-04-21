@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     QString key_header = "Bearer " + QString::fromStdString(file.readLine().toStdString());
     request.setRawHeader(QByteArray("Authorization"),
                          QByteArray(qPrintable(key_header)));
+    file.close();
 
     req = {
         {"model", "gpt-3.5-turbo"},
