@@ -51,5 +51,9 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::replyFinished()
 {
     ui->textEdit_2->clear();
-    ui->textEdit_2->setText(QJsonDocument::fromJson(reply->readAll()).object()["choices"].toArray()[0].toObject()["message"].toObject()["content"].toString());
+    auto messages = req["messages"].toArray();
+    auto message = QJsonDocument::fromJson(reply->readAll()).object()["choices"].toArray()[0].toObject()["message"].toObject();
+    messages.append(message);
+    req["messages"] = messages;
+    ui->textEdit_2->setText(message["content"].toString());
 }
