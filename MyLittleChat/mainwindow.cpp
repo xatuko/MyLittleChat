@@ -39,6 +39,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
+    ui->textEdit->setReadOnly(true);
+    ui->pushButton->setDisabled(true);
     auto message = ui->textEdit->toPlainText();
 
     auto messages = req["messages"].toArray();
@@ -46,14 +48,18 @@ void MainWindow::on_pushButton_clicked()
     req["messages"] = messages;
     QJsonDocument doc(req);
     reply = manager->post(request, doc.toJson(QJsonDocument::Compact));
+
 }
 
 void MainWindow::replyFinished()
 {
+    ui->textEdit->clear();
     ui->textEdit_2->clear();
     auto messages = req["messages"].toArray();
     auto message = QJsonDocument::fromJson(reply->readAll()).object()["choices"].toArray()[0].toObject()["message"].toObject();
     messages.append(message);
     req["messages"] = messages;
     ui->textEdit_2->setText(message["content"].toString());
+    ui->textEdit->setReadOnly(false);
+    ui->pushButton->setDisabled(false);
 }
